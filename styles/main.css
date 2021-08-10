@@ -128,19 +128,10 @@ body {
 }
 
 .elements, .elementsOverlay {
-    left: 97px;
+    left: 208px;
     font-family: FedraBold;
-    font-size: 40px;
 
     color: #5C7CA6;
-}
-
-.elements, .elementsOverlay {
-    left: 208px;
-    font-family: FedraDemi;
-    font-size: 25px;
-
-    color: #9AB7DB;
 }
 
 .elementsOverlay {
@@ -148,14 +139,18 @@ body {
     pointer-events: none;
 }
 
-.elements div {
+.bar {
     margin-left: 32px;
     transition: 1s;
     height: 88px;
     width: 420px;
     border-radius: 19px;
     background-color: #F3F3F3;
-    box-shadow: 5px 5px 5px 0 rgba(222,222,230,0.5), -3px -3px 5px 0 #FEFEFE;
+    box-shadow: inset -3px -3px 5px 0 #FEFEFE, inset 3px 3px 5px 0 rgba(222,222,230,0.5);
+    padding-top: 5px;
+    color: rgba(222,222,230,0.5);
+    font-family: FedraBold;
+    font-size: 50px;
 
     position: absolute;
     display: flex;
@@ -164,8 +159,20 @@ body {
     cursor: pointer;
 }
 
+.inside {
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    height: 80px;
+    width: 412px;
+    border-radius: 16px;
+    background-color: #F3F3F3;
+    box-shadow: inset -3px -3px 5px 0 #FEFEFE, inset 3px 3px 5px 0 rgba(222,222,230,0.5);
+}
+
 .elements p {
     white-space: nowrap;
+    z-index: 0;
 }
 
 .row {
@@ -178,15 +185,6 @@ body {
 
 .row:first-of-type {
     margin: 0;
-}
-
-.bar {
-    height: 5px;
-    width: 187px;
-    border-radius: 19px;
-    box-shadow: inset -2px -2px 5px 0 #FFFFFF, inset 2px 3px 3px 1px rgba(222,222,230,0.72);
-    position: absolute;
-    top: 42.5px;
 }
 
 .item {

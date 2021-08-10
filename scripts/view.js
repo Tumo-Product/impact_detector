@@ -3,15 +3,15 @@ const view = {
     row: `<div class="row"></div>`,
 
     addPair: (current, top, bottom) => {
-        elements.append(`<div class="top"><p>${top.name}</p></div>`);
-        elements.append(`<div class="current"><p>${current.name}</p></div>`);
-        elements.append(`<div class="bottom"><p>${bottom.name}</p></div>`);
-
+        elements.append(`<div class="bar top">      <div class="inside"></div><p>${top.name}</p>    </div>`);
+        elements.append(`<div class="bar current">  <div class="inside"></div><p>${current.name}</p></div>`);
+        elements.append(`<div class="bar bottom">   <div class="inside"></div><p>${bottom.name}</p> </div>`);
     },
     updatePair: async (current, top, bottom, dir) => {
         scrolling = true;
         
         elements.find(dir > 0 ? ".bottom" : ".top").addClass(dir > 0 ? "offscreenBottom" : "offscreenTop");
+
 
         elements.find(".current").addClass(dir > 0 ? "bottom" : "top");
         elements.find(".current").removeClass("current");
@@ -23,13 +23,12 @@ const view = {
         }
 
         if (dir > 0) {
-            elements.find(".current").before(`<div class="offscreenTop"><p>${top.name}</p></div>`);
+            elements.find(".current").before(`<div class="bar offscreenTop"><div class="inside"></div><p>${top.name}</p></div>`);
         } else {
-            elements.find(".current").after(`<div class="offscreenBottom"><p>${bottom.name}</p></div>`);
+            elements.find(".current").after(`<div class="bar offscreenBottom"><div class="inside"></div><p>${bottom.name}</p></div>`);
         }
 
         view.fitText();
-        await timeout(200);
         elements.find(dir > 0 ? ".offscreenTop" : ".offscreenBottom").addClass(dir > 0 ? "top" : "bottom");
         elements.find(dir > 0 ? ".offscreenTop" : ".offscreenBottom").removeClass(dir > 0 ? "offscreenTop" : "offscreenBottom");
 
@@ -38,6 +37,12 @@ const view = {
         elements.find(dir > 0 ? ".offscreenBottom" : ".offscreenTop").remove();
 
         scrolling = false;
+    },
+    addBar: (position, text) => {
+        return `<div class="bar ${position}" onclick="view.clicked()"><div class="inside"></div><p>${text}</p></div>`;
+    },
+    clicked: () => {
+        
     },
     onPlay: async () => {
         $("#status span").last().text(data.length);

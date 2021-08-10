@@ -3,13 +3,14 @@ const timeout = (ms) => {
 }
 
 let data;
-let currentWord = 0;
-let scrolling = false;
-let shuffledWords = [];
-let done = false;
-let originalData = [];
 let elements;
-let href = window.location.href;
+
+let shuffledWords   = [];
+let originalData    = [];
+let currentWord     = 0;
+let scrolling       = false;
+let done            = false;
+let href            = window.location.href;
 
 jQuery.event.special.wheel = {
     setup: function( _, ns, handle ) {
@@ -26,10 +27,6 @@ const onPageLoad = async () => {
     elements = $(".elements");
     originalData = JSON.parse(JSON.stringify(data));
 
-    for (let i = 0; i < data.elements.length; i++) shuffledWords.push(i);
-    shuffledWords = shuffle(shuffledWords);
-
-    // currentWord = shuffledWords[0];
     addWords(currentWord);
 
     $(".elements" ).on('wheel', async function (e) { wheel(e) });
@@ -53,20 +50,6 @@ const scrollTo = async (index, dir) => {
 
 const addWords = async (index) => {
     view.addPair(getWord(index), getWord(index - 1), getWord(index + 1));
-}
-
-const shuffle = (array) => {
-    let i = array.length, j = 0, temp;
-
-    while (i--) {
-        j = Math.floor(Math.random() * (i + 1));
-
-        temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-
-    return array;
 }
 
 const onPlay = async () => {
