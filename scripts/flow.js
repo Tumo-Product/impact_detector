@@ -27,7 +27,13 @@ const onPageLoad = async () => {
     elements = $(".elements");
     originalData = JSON.parse(JSON.stringify(data));
 
+    for (let i = 0; i < data.elements; i++) data.elements[i].enabled = false;
+
     addWords(currentWord);
+
+    $("#kg .value").text(getWord(currentWord).kg);
+    $("#msqr .value").text(getWord(currentWord).msqr);
+    $("#mj .value").text(getWord(currentWord).mj);
 
     $(".elements" ).on('wheel', async function (e) { wheel(e) });
     
@@ -44,8 +50,10 @@ const wheel = (e) => {
 }
 
 const scrollTo = async (index, dir) => {
-    console.log("-----------------------------------");
     view.updatePair(getWord(index), getWord(index - 1), getWord(index + 1), dir);
+    $("#values  #kg     .value").text(getWord(index).kg);
+    $("#values  #msqr   .value").text(getWord(index).msqr);
+    $("#values  #mj     .value").text(getWord(index).mj);
 }
 
 const addWords = async (index) => {
@@ -57,13 +65,28 @@ const onPlay = async () => {
     $("#play").attr("onclick", "check()");
 }
 
+const toggleButton = async () => {
+    
+
+    getWord(currentWord).enabled = !getWord(currentWord).enabled;
+    view.toggleButton(getWord(currentWord).enabled);
+
+    if (getWord(currentWord).enabled)
+        view.updateStatus(true)
+    else
+        view.updateStatus(false);
+    
+    if (view.correct == data.elements.length)
+        $("#play").removeClass("goUnder");
+    else
+        $("#play").addClass("goUnder");
+}
+
 const check = async () => {
     view.flashCircle(); // flash play button circle
-
-    // Cooldown
-    $("#play").attr("onclick", "");
-    await timeout (800);
-    $("#play").attr("onclick", "check()");
+    
+    console.log(data);
+    view.end(data.outcome);
 }
 
 const getWord = (newIndex) => {
@@ -76,8 +99,6 @@ const getWord = (newIndex) => {
     else if (newIndex == length) {
         newIndex = 0;
     }
-
-    console.log(data.elements[newIndex]);
 
     return data.elements[newIndex];
 }

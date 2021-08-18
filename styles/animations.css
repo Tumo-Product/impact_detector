@@ -10,6 +10,18 @@
     top: 157.5px;
 }
 
+.closed .current {
+    top: -44px !important
+}
+
+.closed .top {
+    top: -147.3px !important;
+}
+
+.closed .bottom {
+    top: 59.3px !important;
+}
+
 .offscreenBottom, .offscreenTop {
     transition: 1s !important;
     transition-timing-function: linear;
@@ -23,19 +35,43 @@
     top: 261.5px;
 }
 
-.insetShadow{
-    animation: inset_shadow 2s ease;
+.insetShadow {
     box-shadow: inset -3px -3px 5px 0 #fefefe, inset 3px 3px 5px 0 rgb(222 222 230 / 50%) !important;
+    animation: inset_shadow 2s ease;
 }
 
-.outsideShadow{
-    animation: outside_shadow 2s ease;
+.outsideShadow {
     box-shadow: 5px 5px 5px 0 rgb(222 222 230 / 50%), -3px -3px 5px 0 #fefefe !important;
+    animation: outside_shadow 2s ease;
+}
+
+.insetShadow .inside {
+    opacity: 1;
+}
+
+.outsideShadow .inside {
+    opacity: 0;
 }
 
 .outsideShadow p {
-    color: #EBD730 !important;
-    font-size: 35px !important;
+    color: #9AB7DB !important;
+    font-size: 50px !important;
+}
+
+@keyframes inset_shadow {
+    0% {
+        box-shadow: 5px 5px 5px 0 rgb(222 222 230 / 50%), -3px -3px 5px 0 #fefefe;
+    }
+
+    50% {
+        box-shadow: 0px 0px 0px 0 rgb(222 222 230 / 50%), 0px 0px 0px 0 #fefefe;
+        box-shadow: inset 0px 0px 0px 0 #fefefe, inset 0px 0px 0px 0 rgb(222 222 230 / 50%);
+    }
+
+    100% {
+        box-shadow: 5px 5px 5px 0 rgb(222 222 230 / 50%), -3px -3px 5px 0 #fefefe;
+        box-shadow: inset -3px -3px 5px 0 #fefefe, inset 3px 3px 5px 0 rgb(222 222 230 / 50%);
+    }
 }
 
 @keyframes outside_shadow {
@@ -45,7 +81,7 @@
 
     50% {
         box-shadow: inset 0px 0px 0px 0 #fefefe, inset 0px 0px 0px 0 rgb(222 222 230 / 50%);
-        box-shadow: 0px 0px 0px 0 rgb(222 222 230 / 50%), 0px 0px 0px 0 #fefefe;
+        box-shadow: 0px 0px 0px 0 rgb(222 222 230 / 50%), 0px 0px 0px 0 #fefefe;;
     }
 
     100% {
@@ -97,29 +133,17 @@
     }
 }
 
-.goelements {
-    margin-elements: -220px !important;
+.goRight {
+    margin-right: -220px !important;
 }
 
 .goRight {
-    margin-elements: 320px !important;
+    margin-right: 320px !important;
 }
 
 .closed {
-    top: 275px !important;
+    bottom: 201px !important;
     height: 0px !important;
-}
-
-.closed .current {
-    top: -44px !important
-}
-
-.closed .top {
-    top: -109.5px !important
-}
-
-.closed .bottom {
-    top: 142.5px !important;
 }
 
 .shake {
@@ -151,16 +175,22 @@
 }
 
 .showOutcome {
-    animation: showOutcome 1s linear;
+    height: 451px !important;
+    top: 48px !important;
 }
 
-@keyframes showOutcome {
-    from {
-        opacity: 0;
+.showOutcome .card {
+    animation: showCard 2s ease;
+    animation-fill-mode: forwards;
+}
+
+@keyframes showCard {
+    50% {
+        margin-top: 900px;
     }
 
-    to {
-        opacity: 1;
+    100% {
+        margin-top: 0px;
     }
 }
 

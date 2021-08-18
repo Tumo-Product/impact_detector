@@ -35,7 +35,41 @@
         <p></p>
     </div>
 
-    <div class="outcome"></div>
+    <div class="outcome">
+        <div class="card">
+            <div class="seperator"></div>
+            <p id="outcomeText"></p>
+
+            <div class="rects" id="finalValues">
+                <div class="roundRect" id="kg">
+                    <p class="value">13.4</p>
+                    <p class="type">kg</p>
+        
+                    <div class="container">
+                        <img src="graphics/kg.png">
+                    </div>
+                </div>
+                <div class="roundRect" id="msqr">
+                    <p class="value">5.4</p>
+                    <p class="type">m&#178;</p>
+        
+                    <div class="container">
+                        <img src="graphics/msqr.png">
+                    </div>
+                </div>
+                <div class="roundRect" id="mj">
+                    <p class="value">102</p>
+                    <p class="type">MJ</p>
+        
+                    <div class="container">
+                        <img src="graphics/mj.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="outcomeOverlay"></div>
 
     <div id="play" class="hoverable" onclick="onPlay()">
         <div class="circle"></div>
@@ -64,6 +98,33 @@
 		<div></div>
 		<div></div>
 	</div>
+
+    <div class="rects offscreen" id="values">
+        <div class="roundRect" id="kg">
+            <p class="value">13.4</p>
+            <p class="type">kg</p>
+
+            <div class="container">
+                <img src="graphics/kg.png">
+            </div>
+        </div>
+        <div class="roundRect" id="msqr">
+            <p class="value">5.4</p>
+            <p class="type">m&#178;</p>
+
+            <div class="container">
+                <img src="graphics/msqr.png">
+            </div>
+        </div>
+        <div class="roundRect" id="mj">
+            <p class="value">102</p>
+            <p class="type">MJ</p>
+
+            <div class="container">
+                <img src="graphics/mj.png">
+            </div>
+        </div>
+    </div>
 
     <script src="scripts/config.js"></script>
     <script src="scripts/loader.js"></script>

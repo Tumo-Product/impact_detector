@@ -2,50 +2,68 @@ const view = {
     correct: 0,
     row: `<div class="row"></div>`,
 
+    getBar: (classes, text, i) => {
+        if (getWord(i).enabled) {
+            classes += " outsideShadow";
+        } else {
+            classes += " insetShadow";
+        }
+
+        let bar = `<div class="bar ${classes}"><div class="inside"></div><p>${text}</p></div>`;
+        return bar;
+    },
     addPair: (current, top, bottom) => {
-        elements.append(`<div class="bar top">      <div class="inside"></div><p>${top.name}</p>    </div>`);
-        elements.append(`<div class="bar current">  <div class="inside"></div><p>${current.name}</p></div>`);
-        elements.append(`<div class="bar bottom">   <div class="inside"></div><p>${bottom.name}</p> </div>`);
+        elements.append(view.getBar("top",      top.name,       currentWord - 1));
+        elements.append(view.getBar("current",  current.name,   currentWord));
+        elements.append(view.getBar("bottom",   bottom.name,    currentWord + 1));
+
+        $(".current").attr("onclick", "toggleButton()");
     },
     updatePair: async (current, top, bottom, dir) => {
         scrolling = true;
         
-        elements.find(dir > 0 ? ".bottom" : ".top").addClass(dir > 0 ? "offscreenBottom" : "offscreenTop");
+        elements.find(dir < 0 ? ".bottom" : ".top").addClass(dir < 0 ? "offscreenBottom" : "offscreenTop");
 
-
-        elements.find(".current").addClass(dir > 0 ? "bottom" : "top");
+        elements.find(".current").addClass(dir < 0 ? "bottom" : "top");
         elements.find(".current").removeClass("current");
 
-        elements.find(dir > 0 ? ".top" : ".bottom").addClass("current");
-        elements.find(dir > 0 ? ".top" : ".bottom").removeClass(dir > 0 ? "top" : "bottom");
+        elements.find(dir < 0 ? ".top" : ".bottom").addClass("current");
+        elements.find(dir < 0 ? ".top" : ".bottom").removeClass(dir < 0 ? "top" : "bottom");
         if (data.length >= 3) {
             elements.find(".current p").text(current.name);
         }
 
-        if (dir > 0) {
-            elements.find(".current").before(`<div class="bar offscreenTop"><div class="inside"></div><p>${top.name}</p></div>`);
+        if (dir < 0) {
+            elements.find(".current").before(view.getBar("offscreenTop",    top.name, currentWord - 1));
         } else {
-            elements.find(".current").after(`<div class="bar offscreenBottom"><div class="inside"></div><p>${bottom.name}</p></div>`);
+            elements.find(".current").after(view.getBar("offscreenBottom",  bottom.name, currentWord + 1));
         }
 
         view.fitText();
-        elements.find(dir > 0 ? ".offscreenTop" : ".offscreenBottom").addClass(dir > 0 ? "top" : "bottom");
-        elements.find(dir > 0 ? ".offscreenTop" : ".offscreenBottom").removeClass(dir > 0 ? "offscreenTop" : "offscreenBottom");
+        elements.find(dir < 0 ? ".offscreenTop" : ".offscreenBottom").addClass(dir < 0 ? "top" : "bottom");
+        elements.find(dir < 0 ? ".offscreenTop" : ".offscreenBottom").removeClass(dir < 0 ? "offscreenTop" : "offscreenBottom");
 
         await timeout (600);
-        elements.find(dir > 0 ? ".bottom p" : ".top p").text(dir > 0 ? bottom.name : top.name);
-        elements.find(dir > 0 ? ".offscreenBottom" : ".offscreenTop").remove();
+        elements.find(dir < 0 ? ".bottom p" : ".top p").text(dir < 0 ? bottom.name : top.name);
+        elements.find(dir < 0 ? ".offscreenBottom" : ".offscreenTop").remove();
+
+        $(".bar").attr("onclick", "");
+        $(".current").attr("onclick", "toggleButton()");
 
         scrolling = false;
     },
-    addBar: (position, text) => {
-        return `<div class="bar ${position}" onclick="view.clicked()"><div class="inside"></div><p>${text}</p></div>`;
-    },
-    clicked: () => {
-        
+    toggleButton: (enabled) => {
+        if (enabled) {
+            $(".current").removeClass("insetShadow");
+            $(".current").addClass("outsideShadow");
+        } else {
+            $(".current").removeClass("outsideShadow");
+            $(".current").addClass("insetShadow");
+        }
     },
     onPlay: async () => {
-        $("#status span").last().text(data.length);
+        $("#play").addClass("goUnder");
+        $("#status span").last().text(data.elements.length);
         $("#status").addClass("show");
         $(".question").css("opacity", 0);
 
@@ -62,6 +80,8 @@ const view = {
         for (let i = 0; i < classes.length; i++) {
             $(classes[i]).removeClass("closed");
         }
+
+        $("#values").removeClass("offscreen");
     },
     toggleFlash: async(color) => {
 		$(`#${color}`).css("opacity", 1);
@@ -73,46 +93,31 @@ const view = {
         await timeout(300);
         $(".circle").css("opacity", 1);
     },
-    updateStatus: () =>{
-        $("#status span").first().text(++view.correct);
+    updateStatus: (increment) =>{
+        if (increment)
+            $("#status span").first().text(++view.correct);
+        else
+            $("#status span").first().text(--view.correct);
     },
     shake: async () => {
         $(".current").addClass("shake");
         await timeout(820);
         $(".current").removeClass("shake");
     },
-    end: async () => {
-        await timeout(200);
-        let classes = [".elements", ".right", ".elementsOverlay", ".rightOverlay"];
+    end: async (outcomeText) => {
+        $(".elements").addClass("closed");
+        $(".elementsOverlay").addClass("closed");
 
-        for (let i = 0; i < classes.length; i++) {
-            $(classes[i]).addClass("closed");
-        }
-
-        $("#play").addClass("goUnder");
         $("#status").removeClass("show");
+        $("#values").addClass("offscreen");
+        $("#play").addClass("goUnder");
 
         await timeout(1000);
-        $(".outcome").show();
+
+        $("#outcomeText").text(outcomeText);
+
         $(".outcome").addClass("showOutcome");
-
-        let rowCount = Math.ceil(originalData.length / 3);
-        let itemCount = 0;
-
-        for (let i = 0; i < rowCount; i++) {
-            $(".outcome").append(view.row);
-            
-            for (let j = 0; j < 3; j++) {
-                view.createItem($(".row").eq(i), originalData[itemCount].text, originalData[itemCount].value);
-                itemCount++;
-
-                if (itemCount == originalData.length) {
-                    return;
-                }
-            }
-
-            await timeout(200);
-        }
+        $(".outcomeOverlay").addClass("showOutcome");
     },
     createItem: async (elements, text, value) => {
         let item = `<div class="item">
