@@ -5,8 +5,6 @@ const timeout = (ms) => {
 let data;
 let elements;
 
-let shuffledWords   = [];
-let originalData    = [];
 let currentWord     = 0;
 let scrolling       = false;
 let done            = false;
@@ -25,7 +23,6 @@ const onPageLoad = async () => {
 
     href = href.substring(0, href.indexOf("?"));
     elements = $(".elements");
-    originalData = JSON.parse(JSON.stringify(data));
 
     for (let i = 0; i < data.elements; i++) data.elements[i].enabled = false;
 
@@ -51,6 +48,8 @@ const wheel = (e) => {
 
 const scrollTo = async (index, dir) => {
     view.updatePair(getWord(index), getWord(index - 1), getWord(index + 1), dir);
+
+    await timeout(200);
     $("#values  #kg     .value").text(getWord(index).kg);
     $("#values  #msqr   .value").text(getWord(index).msqr);
     $("#values  #mj     .value").text(getWord(index).mj);
@@ -66,13 +65,11 @@ const onPlay = async () => {
 }
 
 const toggleButton = async () => {
-    
-
     getWord(currentWord).enabled = !getWord(currentWord).enabled;
     view.toggleButton(getWord(currentWord).enabled);
 
     if (getWord(currentWord).enabled)
-        view.updateStatus(true)
+        view.updateStatus(true);
     else
         view.updateStatus(false);
     
@@ -84,9 +81,16 @@ const toggleButton = async () => {
 
 const check = async () => {
     view.flashCircle(); // flash play button circle
-    
-    console.log(data);
-    view.end(data.outcome);
+
+    let kg = 0, msqr = 0, mj = 0;
+
+    for (let i = 0; i < data.elements.length; i++) {
+        kg   += parseFloat(data.elements[i].kg);
+        msqr += parseFloat(data.elements[i].msqr);
+        mj   += parseFloat(data.elements[i].mj);
+    }
+
+    view.end(data.outcome, kg, msqr, mj);
 }
 
 const getWord = (newIndex) => {

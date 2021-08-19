@@ -93,7 +93,7 @@ const view = {
         await timeout(300);
         $(".circle").css("opacity", 1);
     },
-    updateStatus: (increment) =>{
+    updateStatus: async (increment) => {
         if (increment)
             $("#status span").first().text(++view.correct);
         else
@@ -104,7 +104,7 @@ const view = {
         await timeout(820);
         $(".current").removeClass("shake");
     },
-    end: async (outcomeText) => {
+    end: async (outcomeText, kg, msqr, mj) => {
         $(".elements").addClass("closed");
         $(".elementsOverlay").addClass("closed");
 
@@ -115,6 +115,9 @@ const view = {
         await timeout(1000);
 
         $("#outcomeText").text(outcomeText);
+        $("#finalValues  #kg     .value").text(kg);
+        $("#finalValues  #msqr   .value").text(msqr);
+        $("#finalValues  #mj     .value").text(mj);
 
         $(".outcome").addClass("showOutcome");
         $(".outcomeOverlay").addClass("showOutcome");
