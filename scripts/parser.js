@@ -16,8 +16,8 @@ const dummyJson = {
 	intro	: "Choose 5 to see how food waste affects the environment more text maybe …",
 	elements: [
 		{
-			name: "A beef burrito",
-			kg	: 13.4,
+			name: "A beef burritoburrito",
+			kg	: 13.894,
 			msqr: 5.4,
 			mj	: 102
 		},
@@ -28,8 +28,8 @@ const dummyJson = {
 			mj	: 106
 		},
 		{
-			name: "Sushi",
-			kg	: 15.4,
+			name: "Sushi beef beef beefbeef",
+			kg	: 15.6844,
 			msqr: 6.4,
 			mj	: 100
 		},

@@ -1,5 +1,6 @@
 .current {
     top: 53.5px;
+    cursor: pointer;
 }
 
 .top {
@@ -22,11 +23,6 @@
     top: 59.3px !important;
 }
 
-.offscreenBottom, .offscreenTop {
-    transition: 1s !important;
-    transition-timing-function: linear;
-}
-
 .offscreenTop {
     top: -154.5px;
 }
@@ -37,12 +33,10 @@
 
 .insetShadow {
     box-shadow: inset -3px -3px 5px 0 #fefefe, inset 3px 3px 5px 0 rgb(222 222 230 / 50%) !important;
-    animation: inset_shadow 2s ease;
 }
 
 .outsideShadow {
     box-shadow: 5px 5px 5px 0 rgb(222 222 230 / 50%), -3px -3px 5px 0 #fefefe !important;
-    animation: outside_shadow 2s ease;
 }
 
 .insetShadow .inside {
@@ -55,38 +49,6 @@
 
 .outsideShadow p {
     color: #9AB7DB !important;
-    font-size: 50px !important;
-}
-
-@keyframes inset_shadow {
-    0% {
-        box-shadow: 5px 5px 5px 0 rgb(222 222 230 / 50%), -3px -3px 5px 0 #fefefe;
-    }
-
-    50% {
-        box-shadow: 0px 0px 0px 0 rgb(222 222 230 / 50%), 0px 0px 0px 0 #fefefe;
-        box-shadow: inset 0px 0px 0px 0 #fefefe, inset 0px 0px 0px 0 rgb(222 222 230 / 50%);
-    }
-
-    100% {
-        box-shadow: 5px 5px 5px 0 rgb(222 222 230 / 50%), -3px -3px 5px 0 #fefefe;
-        box-shadow: inset -3px -3px 5px 0 #fefefe, inset 3px 3px 5px 0 rgb(222 222 230 / 50%);
-    }
-}
-
-@keyframes outside_shadow {
-    0% {
-        box-shadow: inset -3px -3px 5px 0 #fefefe, inset 3px 3px 5px 0 rgb(222 222 230 / 50%);
-    }
-
-    50% {
-        box-shadow: inset 0px 0px 0px 0 #fefefe, inset 0px 0px 0px 0 rgb(222 222 230 / 50%);
-        box-shadow: 0px 0px 0px 0 rgb(222 222 230 / 50%), 0px 0px 0px 0 #fefefe;;
-    }
-
-    100% {
-        box-shadow: 5px 5px 5px 0 rgb(222 222 230 / 50%), -3px -3px 5px 0 #fefefe;
-    }
 }
 
 .red {
@@ -168,6 +130,16 @@
     40%, 60% {
         transform: translate3d(4px, 0, 0);
     }
+}
+
+.disable path {
+    fill: grey;
+    opacity: 0.3;
+}
+
+.disable {
+    pointer-events: none;
+    cursor: initial;
 }
 
 .goUnder {

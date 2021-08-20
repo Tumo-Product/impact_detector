@@ -12,12 +12,13 @@ const view = {
         let bar = `<div class="bar ${classes}"><div class="inside"></div><p>${text}</p></div>`;
         return bar;
     },
-    addPair: (current, top, bottom) => {
+    addPair: async (current, top, bottom) => {
         elements.append(view.getBar("top",      top.name,       currentWord - 1));
         elements.append(view.getBar("current",  current.name,   currentWord));
         elements.append(view.getBar("bottom",   bottom.name,    currentWord + 1));
 
         $(".current").attr("onclick", "toggleButton()");
+        view.fitText(".bar", 42);
     },
     updatePair: async (current, top, bottom, dir) => {
         scrolling = true;
@@ -29,22 +30,36 @@ const view = {
 
         elements.find(dir < 0 ? ".top" : ".bottom").addClass("current");
         elements.find(dir < 0 ? ".top" : ".bottom").removeClass(dir < 0 ? "top" : "bottom");
-        if (data.length >= 3) {
+        if (data.elements.length >= 3) {
             elements.find(".current p").text(current.name);
         }
 
         if (dir < 0) {
             elements.find(".current").before(view.getBar("offscreenTop",    top.name, currentWord - 1));
+            $(".offscreenTop p").css("font-size", "+=0.01"); // Don't ask me why.
+
+            if (getWord(currentWord - 1).enabled) {
+                $(".offscreenTop p").css("font-size", getWord(currentWord - 1).fontSize);
+            }
+            else {
+                view.fitText(".offscreenTop", 42);
+            }
         } else {
             elements.find(".current").after(view.getBar("offscreenBottom",  bottom.name, currentWord + 1));
+            $(".offscreenBottom p").css("font-size", "+=0.01"); // Don't ask me why.
+
+            if (getWord(currentWord + 1).enabled) {
+                $(".offscreenBottom p").css("font-size", getWord(currentWord + 1).fontSize);
+            }
+            else {
+                view.fitText(".offscreenBottom", 42);
+            }
         }
 
-        view.fitText();
         elements.find(dir < 0 ? ".offscreenTop" : ".offscreenBottom").addClass(dir < 0 ? "top" : "bottom");
         elements.find(dir < 0 ? ".offscreenTop" : ".offscreenBottom").removeClass(dir < 0 ? "offscreenTop" : "offscreenBottom");
 
         await timeout (600);
-        elements.find(dir < 0 ? ".bottom p" : ".top p").text(dir < 0 ? bottom.name : top.name);
         elements.find(dir < 0 ? ".offscreenBottom" : ".offscreenTop").remove();
 
         $(".bar").attr("onclick", "");
@@ -56,13 +71,16 @@ const view = {
         if (enabled) {
             $(".current").removeClass("insetShadow");
             $(".current").addClass("outsideShadow");
+            $(".current p").animate({ fontSize: "+=3" }, 200);
+            getWord(currentWord).fontSize = parseInt($(".current p").css("font-size")) + 3;
         } else {
             $(".current").removeClass("outsideShadow");
             $(".current").addClass("insetShadow");
+            $(".current p").animate({ fontSize: "-=3" }, 200);
         }
     },
     onPlay: async () => {
-        $("#play").addClass("goUnder");
+        $("#play").addClass("disable");
         $("#status span").last().text(data.elements.length);
         $("#status").addClass("show");
         $(".question").css("opacity", 0);
@@ -83,11 +101,6 @@ const view = {
 
         $("#values").removeClass("offscreen");
     },
-    toggleFlash: async(color) => {
-		$(`#${color}`).css("opacity", 1);
-		await timeout(500);
-		$(`#${color}`).css("opacity", 0);
-	},
     flashCircle: async() => {
         $(".circle").css("opacity", 0);
         await timeout(300);
@@ -119,25 +132,26 @@ const view = {
         $("#finalValues  #msqr   .value").text(msqr);
         $("#finalValues  #mj     .value").text(mj);
 
+        view.fitText("#finalValues .roundRect", 20, true);
+
         $(".outcome").addClass("showOutcome");
         $(".outcomeOverlay").addClass("showOutcome");
     },
-    createItem: async (elements, text, value) => {
-        let item = `<div class="item">
-                        <p>${text}</p>
-                        <div class="bar"></div>
-                        <p>${value}</p>
-                    </div>`;
+    fitText: (parent, offset, applyMargin) => {
+        if (offset === undefined) offset = 0;
 
-        elements.append(item);
-    },
-    fitText: () => {
-		$(`.current`).each(function () {
-			let size;
+		$(parent).each(function () {
+			let size, marginSize;
+            let paragraph = $(this).find("p").first();
+            console.log(paragraph.prop("scrollWidth"), $(this).width());
 
-			while ($(this).find("p").width() > $(this).width() - 10) {
-				size = parseInt($(this).find("p").css("font-size"), 10);
-				$(this).find("p").css("font-size", size - 1);
+			while (paragraph.prop("scrollWidth") > $(this).width() - offset) {
+				size        = parseInt(paragraph.css("font-size"),  10);
+                marginSize  = parseFloat(paragraph.css("margin-top"), 10);
+
+				paragraph.css("font-size", size - 1);
+                if (applyMargin === true)
+                    paragraph.css("margin-top", marginSize + 0.6);
 			}
 		});
 	},

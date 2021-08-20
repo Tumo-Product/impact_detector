@@ -24,13 +24,18 @@ const onPageLoad = async () => {
     href = href.substring(0, href.indexOf("?"));
     elements = $(".elements");
 
-    for (let i = 0; i < data.elements; i++) data.elements[i].enabled = false;
+    for (let i = 0; i < data.elements.length; i++) {
+        data.elements[i].enabled = false;
+    }
+    console.log(data.elements);
 
     addWords(currentWord);
 
     $("#kg .value").text(getWord(currentWord).kg);
     $("#msqr .value").text(getWord(currentWord).msqr);
     $("#mj .value").text(getWord(currentWord).mj);
+
+    view.fitText("#values .roundRect", 20, true);
 
     $(".elements" ).on('wheel', async function (e) { wheel(e) });
     
@@ -39,7 +44,7 @@ const onPageLoad = async () => {
 
 const wheel = (e) => {
     if (!scrolling && !done) {
-        let dir = -Math.sign(e.originalEvent.wheelDelta);
+        let dir = Math.sign(e.originalEvent.wheelDelta);
         currentWord += dir;
         
         scrollTo(currentWord, dir);
@@ -53,6 +58,8 @@ const scrollTo = async (index, dir) => {
     $("#values  #kg     .value").text(getWord(index).kg);
     $("#values  #msqr   .value").text(getWord(index).msqr);
     $("#values  #mj     .value").text(getWord(index).mj);
+
+    view.fitText("#values .roundRect", 20, true);
 }
 
 const addWords = async (index) => {
@@ -74,9 +81,9 @@ const toggleButton = async () => {
         view.updateStatus(false);
     
     if (view.correct == data.elements.length)
-        $("#play").removeClass("goUnder");
+        $("#play").removeClass("disable");
     else
-        $("#play").addClass("goUnder");
+        $("#play").addClass("disable");
 }
 
 const check = async () => {
