@@ -27,17 +27,16 @@ const onPageLoad = async () => {
     for (let i = 0; i < data.elements.length; i++) {
         data.elements[i].enabled = false;
     }
-    console.log(data.elements);
 
-    addWords(currentWord);
+    await addWords(currentWord);
 
     $("#kg .value").text(getWord(currentWord).kg);
     $("#msqr .value").text(getWord(currentWord).msqr);
     $("#mj .value").text(getWord(currentWord).mj);
 
-    view.fitText("#values .roundRect", 20, true);
+    view.fitText("#values .roundRect", {x: 20, y: 0}, {fontSize: 50, marginTop: 45}, true);
 
-    $(".elements" ).on('wheel', async function (e) { wheel(e) });
+    $(".elements").on('wheel', async function (e) { wheel(e) });
     
     loader.toggle();
 }
@@ -54,16 +53,16 @@ const wheel = (e) => {
 const scrollTo = async (index, dir) => {
     view.updatePair(getWord(index), getWord(index - 1), getWord(index + 1), dir);
 
-    await timeout(200);
+    await timeout(150);
     $("#values  #kg     .value").text(getWord(index).kg);
     $("#values  #msqr   .value").text(getWord(index).msqr);
     $("#values  #mj     .value").text(getWord(index).mj);
 
-    view.fitText("#values .roundRect", 20, true);
+    view.fitText("#values .roundRect", {x: 20, y: 0}, {fontSize: 50, marginTop: 45}, true);
 }
 
 const addWords = async (index) => {
-    view.addPair(getWord(index), getWord(index - 1), getWord(index + 1));
+    await view.addPair(getWord(index), getWord(index - 1), getWord(index + 1));
 }
 
 const onPlay = async () => {
@@ -97,7 +96,7 @@ const check = async () => {
         mj   += parseFloat(data.elements[i].mj);
     }
 
-    view.end(data.outcome, kg, msqr, mj);
+    view.end(data.outcome, kg.toFixed(2), msqr.toFixed(2), mj.toFixed(2));
 }
 
 const getWord = (newIndex) => {

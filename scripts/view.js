@@ -18,7 +18,8 @@ const view = {
         elements.append(view.getBar("bottom",   bottom.name,    currentWord + 1));
 
         $(".current").attr("onclick", "toggleButton()");
-        view.fitText(".bar", 42);
+        await timeout(5);
+        view.fitText(".bar", {x: 40, y: 30});
     },
     updatePair: async (current, top, bottom, dir) => {
         scrolling = true;
@@ -40,9 +41,10 @@ const view = {
 
             if (getWord(currentWord - 1).enabled) {
                 $(".offscreenTop p").css("font-size", getWord(currentWord - 1).fontSize);
+                $(".offscreenTop p").css("max-width", "none");
             }
             else {
-                view.fitText(".offscreenTop", 42);
+                view.fitText(".offscreenTop", {x: 40, y: 30});
             }
         } else {
             elements.find(".current").after(view.getBar("offscreenBottom",  bottom.name, currentWord + 1));
@@ -50,9 +52,10 @@ const view = {
 
             if (getWord(currentWord + 1).enabled) {
                 $(".offscreenBottom p").css("font-size", getWord(currentWord + 1).fontSize);
+                $(".offscreenBottom p").css("max-width", "none");
             }
             else {
-                view.fitText(".offscreenBottom", 42);
+                view.fitText(".offscreenBottom", {x: 40, y: 30});
             }
         }
 
@@ -67,16 +70,19 @@ const view = {
 
         scrolling = false;
     },
-    toggleButton: (enabled) => {
+    toggleButton: async (enabled) => {
         if (enabled) {
             $(".current").removeClass("insetShadow");
             $(".current").addClass("outsideShadow");
-            $(".current p").animate({ fontSize: "+=3" }, 200);
+            $(".current p").animate({ fontSize: "+=2" }, 200);
+            $(".current p").css("max-width", 400);
             getWord(currentWord).fontSize = parseInt($(".current p").css("font-size")) + 3;
         } else {
             $(".current").removeClass("outsideShadow");
             $(".current").addClass("insetShadow");
-            $(".current p").animate({ fontSize: "-=3" }, 200);
+            $(".current p").animate({ fontSize: "-=2" }, 200);
+            await timeout(200);
+            $(".current p").css("max-width", 350);
         }
     },
     onPlay: async () => {
@@ -86,7 +92,7 @@ const view = {
         $(".question").css("opacity", 0);
 
         $("#play svg").css("opacity", 0);
-        await timeout (500);
+        await timeout (200);
         $("#play svg").remove();
         $(".icon").load(href + "graphics/checkmark.svg");
         $(".icon").addClass("checkmark");
@@ -132,26 +138,32 @@ const view = {
         $("#finalValues  #msqr   .value").text(msqr);
         $("#finalValues  #mj     .value").text(mj);
 
-        view.fitText("#finalValues .roundRect", 20, true);
+        view.fitText("#finalValues .roundRect", {x: 20, y: 0}, {fontSize: 50, marginTop: 45}, true);
 
         $(".outcome").addClass("showOutcome");
         $(".outcomeOverlay").addClass("showOutcome");
     },
-    fitText: (parent, offset, applyMargin) => {
-        if (offset === undefined) offset = 0;
+    fitText: (parent, offset, defaultSettings, applyMargin) => {
+        if (offset === undefined) offset = {x: 0, y: 0};
 
 		$(parent).each(function () {
 			let size, marginSize;
             let paragraph = $(this).find("p").first();
-            console.log(paragraph.prop("scrollWidth"), $(this).width());
 
-			while (paragraph.prop("scrollWidth") > $(this).width() - offset) {
-				size        = parseInt(paragraph.css("font-size"),  10);
-                marginSize  = parseFloat(paragraph.css("margin-top"), 10);
+            if (defaultSettings !== undefined) {
+                paragraph.css("font-size", defaultSettings.fontSize);
+                paragraph.css("margin-top", defaultSettings.marginTop);
+            }
 
-				paragraph.css("font-size", size - 1);
-                if (applyMargin === true)
-                    paragraph.css("margin-top", marginSize + 0.6);
+			while (paragraph.height() > $(this).height() - offset.y || paragraph.width() > $(this).width() - offset.x) {
+                size        = parseInt(paragraph.css("font-size"),  10);
+
+				paragraph.css("font-size", size - 1.5);
+
+                if (applyMargin === true) {
+                    marginSize  = parseFloat(paragraph.css("margin-top"), 10);
+                    paragraph.css("margin-top", marginSize + 1.3);
+                }
 			}
 		});
 	},

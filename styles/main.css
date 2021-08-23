@@ -287,7 +287,9 @@ body {
 }
 
 .elements p {
-    white-space: nowrap;
+    /* white-space: nowrap; */
+    max-width: 350px;
+    text-align: center;
     z-index: 0;
     font-family: FedraBold;
     font-size: 47px;

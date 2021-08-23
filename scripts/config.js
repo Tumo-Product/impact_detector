@@ -1,3 +1,3 @@
 const config = {
-    query_url: "wordspinner/getsetsone?_uid="
+    query_url: "impactdetector/getsetsone?_uid="
 }
