@@ -18,7 +18,7 @@ const view = {
         elements.append(view.getBar("bottom",   bottom.name,    currentWord + 1));
 
         $(".current").attr("onclick", "toggleButton()");
-        await timeout(5);
+        await timeout(100);
         view.fitText(".bar", {x: 40, y: 30});
     },
     updatePair: async (current, top, bottom, dir) => {
@@ -87,7 +87,7 @@ const view = {
     },
     onPlay: async () => {
         $("#play").addClass("disable");
-        $("#status span").last().text(data.elements.length);
+        $("#status span").last().text(5);
         $("#status").addClass("show");
         $(".question").css("opacity", 0);
 

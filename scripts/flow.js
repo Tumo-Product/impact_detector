@@ -5,7 +5,8 @@ const timeout = (ms) => {
 let data;
 let elements;
 
-let currentWord     = 1;
+let currentWord     = 0;
+let canToggle       = true;
 let scrolling       = false;
 let done            = false;
 let href            = window.location.href;
@@ -71,18 +72,24 @@ const onPlay = async () => {
 }
 
 const toggleButton = async () => {
-    getWord(currentWord).enabled = !getWord(currentWord).enabled;
-    view.toggleButton(getWord(currentWord).enabled);
+    if (canToggle || getWord(currentWord).enabled) {
+        getWord(currentWord).enabled = !getWord(currentWord).enabled;
+        view.toggleButton(getWord(currentWord).enabled);
 
-    if (getWord(currentWord).enabled)
-        view.updateStatus(true);
-    else
-        view.updateStatus(false);
-    
-    if (view.correct == data.elements.length)
-        $("#play").removeClass("disable");
-    else
-        $("#play").addClass("disable");
+        if (getWord(currentWord).enabled)
+            view.updateStatus(true);
+        else
+            view.updateStatus(false);
+        
+        if (view.correct == 5) {
+            $("#play").removeClass("disable");
+            canToggle = false;
+        }
+        else {
+            canToggle = true;
+            $("#play").addClass("disable");
+        }
+    }
 }
 
 const check = async () => {
