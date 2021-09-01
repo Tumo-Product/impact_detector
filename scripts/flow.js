@@ -5,7 +5,7 @@ const timeout = (ms) => {
 let data;
 let elements;
 
-let currentWord     = 0;
+let currentWord     = 1;
 let scrolling       = false;
 let done            = false;
 let href            = window.location.href;
