@@ -17,7 +17,7 @@ const parser = {
 }
 
 const dummyJson = {
-	intro	: "Choose 5 to see how food waste affects the environment more text maybe …",
+	intro	: "Choisis-en cinq pour voir comment leur gaspillage alimentaire affecte l'environnement. Si tu peux, choisis ceux que tu a jetés cette semaine pour vérifier l'impact environnemental de ton propre gaspillage alimentaire.<br><br> L’impact environnemental est donné pour un kilogramme de chaque plat, ce qui te permet de mieux les comparer entre eux.",
 	elements: [
 		{
 			name: "Une pizza à la viande",

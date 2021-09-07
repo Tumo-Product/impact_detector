@@ -20,7 +20,7 @@ jQuery.event.special.wheel = {
 const onPageLoad = async () => {
     data = await parser.dataFetch();
     // data = data.data.data.elements;
-    $(".question p").text(data.intro);
+    $(".question p").html(data.intro);
 
     href = href.substring(0, href.indexOf("?"));
     elements = $(".elements");
