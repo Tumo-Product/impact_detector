@@ -95,15 +95,17 @@ const toggleButton = async () => {
 const check = async () => {
     view.flashCircle(); // flash play button circle
 
-    let kg = 0, msqr = 0, mj = 0;
+    let kg = 0, msqr = 0, mj = 0, impact = 0;
 
     for (let i = 0; i < data.elements.length; i++) {
         kg   += parseFloat(data.elements[i].kg);
         msqr += parseFloat(data.elements[i].msqr);
         mj   += parseFloat(data.elements[i].mj);
+        if (data.elements[i].enabled === true)
+            impact += parseFloat(data.elements[i].impact);
     }
 
-    view.end(data.outcome, kg.toFixed(2), msqr.toFixed(2), mj.toFixed(2));
+    view.end(data.outcome, kg.toFixed(2), msqr.toFixed(2), mj.toFixed(2), impact.toFixed(2));
 }
 
 const getWord = (newIndex) => {

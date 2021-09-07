@@ -18,7 +18,7 @@ const view = {
         elements.append(view.getBar("bottom",   bottom.name,    currentWord + 1));
 
         $(".current").attr("onclick", "toggleButton()");
-        await timeout(100);
+        await timeout(1000);
         view.fitText(".bar", {x: 40, y: 30});
     },
     updatePair: async (current, top, bottom, dir) => {
@@ -77,12 +77,14 @@ const view = {
             $(".current p").animate({ fontSize: "+=2" }, 200);
             $(".current p").css("max-width", 400);
             getWord(currentWord).fontSize = parseInt($(".current p").css("font-size")) + 3;
+            getWord(currentWord).enabled  = true;
         } else {
             $(".current").removeClass("outsideShadow");
             $(".current").addClass("insetShadow");
             $(".current p").animate({ fontSize: "-=2" }, 200);
             await timeout(200);
             $(".current p").css("max-width", 350);
+            getWord(currentWord).enabled  = false;
         }
     },
     onPlay: async () => {
@@ -123,7 +125,7 @@ const view = {
         await timeout(820);
         $(".current").removeClass("shake");
     },
-    end: async (outcomeText, kg, msqr, mj) => {
+    end: async (outcomeText, kg, msqr, mj, impact) => {
         $(".elements").addClass("closed");
         $(".elementsOverlay").addClass("closed");
 
@@ -133,7 +135,7 @@ const view = {
 
         await timeout(1000);
 
-        $("#outcomeText").text(outcomeText);
+        $("#outcomeText").text(await parser.getOutcomeText(outcomeText, impact));
         $("#finalValues  #kg     .value").text(kg);
         $("#finalValues  #msqr   .value").text(msqr);
         $("#finalValues  #mj     .value").text(mj);
