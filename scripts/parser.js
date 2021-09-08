@@ -160,14 +160,14 @@ const dummyJson = {
 			impact: 0.08
 		},
 		{
-			name: "Un espresso",
+			name: "Un expresso",
 			kg	: 0.56,
 			msqr: 1.16,
 			mj	: 6.42,
 			impact: 0.13
 		},
 		{
-			name: "Boisson énergisante",
+			name: "Une boisson énergisante",
 			kg	: 0.51,
 			msqr: 0.48,
 			mj	: 12.67,
