@@ -131,6 +131,12 @@ body {
     left: 8px !important;
 }
 
+#kg img {
+    width: 60px;
+    margin-right: 5px;
+    margin-top: 2px;
+}
+
 #play {
     transition: 1s;
 	background: #F3F3F3;
